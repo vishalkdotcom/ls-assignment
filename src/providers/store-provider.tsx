@@ -6,7 +6,7 @@ import { persistStore } from "redux-persist";
 import { PersistGate } from "redux-persist/integration/react";
 
 import { makeStore, AppStore } from "@/lib/store";
-import { Box, CircularProgress, Grid, Typography } from "@mui/material";
+import { Box, CircularProgress, Typography } from "@mui/material";
 
 export default function StoreProvider({ children }: React.PropsWithChildren) {
   const storeRef = React.useRef<AppStore>();
@@ -41,7 +41,7 @@ function Loader() {
     >
       <CircularProgress />
       <Typography variant="body2" sx={{ mt: 2, ml: 1.5 }}>
-        Loading your tweets...
+        Loading...
       </Typography>
     </Box>
   );
