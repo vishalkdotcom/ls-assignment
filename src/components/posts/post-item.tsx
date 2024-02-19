@@ -6,36 +6,36 @@ import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import {
   Avatar,
   Divider,
-  IconButton,
   ListItem,
   ListItemAvatar,
   ListItemText,
 } from "@mui/material";
-import type { Post } from "@/content/posts";
-import PostAction from "./post-action";
+
+import type { Post } from "@/types/app";
+import PostAction from "@/components/posts/post-action";
 
 type Props = {
   post: Post;
 };
 
 export default function PostItem({ post }: Props) {
-  const { id, postText, username, likes, comments } = post;
+  const { id, text, userName, likes, comments } = post;
 
   return (
     <React.Fragment key={id}>
       <ListItem alignItems="flex-start">
         <ListItemAvatar>
-          <Avatar alt={username} />
+          <Avatar alt={userName} />
         </ListItemAvatar>
 
         <ListItemText
-          primary={<Typography variant="subtitle1">{username}</Typography>}
+          primary={<Typography variant="subtitle1">{userName}</Typography>}
           secondaryTypographyProps={{ component: "div" }}
           secondary={
             <PostInnerWrapper>
-              <Typography variant="body1">{postText}</Typography>
+              <Typography variant="body1">{text}</Typography>
               <PostActionsWrapper>
-                <PostAction label={likes} icon={FavoriteBorderIcon} />
+                <PostAction label={likes.length} icon={FavoriteBorderIcon} />
                 <PostAction
                   label={comments.length}
                   icon={ChatBubbleOutlineIcon}
