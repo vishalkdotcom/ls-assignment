@@ -24,7 +24,8 @@ export default function CreateCommentForm({ postId }: Props) {
     event.preventDefault();
 
     const session = getSession();
-    if (!session || !postId) {
+    if (!session) {
+      window.alert("Please login first.");
       return;
     }
 

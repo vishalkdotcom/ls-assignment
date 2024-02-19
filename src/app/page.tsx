@@ -6,10 +6,8 @@ import PostList from "@/components/posts/post-list";
 import { useAppSelector } from "@/lib/hooks";
 import { selectPosts } from "@/lib/features/posts/postsSlice";
 import CreatePostForm from "@/components/posts/create-post-form";
-import { isLoggedIn } from "@/lib/auth";
 
 export default function Home() {
-  const isAuthenticated = isLoggedIn();
   const posts = useAppSelector(selectPosts);
 
   return (
@@ -17,7 +15,7 @@ export default function Home() {
       maxWidth="sm"
       // style={{ maxWidth: "768px"}}
     >
-      {isAuthenticated && <CreatePostForm />}
+      <CreatePostForm />
       <Box sx={{ mt: 2, mb: 8 }}>
         <Typography variant="h6">Feed</Typography>
         <PostList posts={posts} />
