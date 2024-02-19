@@ -38,8 +38,6 @@ export default function PostItem({ post }: Props) {
     dispatch(toggleLike({ postId, userId }));
   }
 
-  function handleCommentOnPost() {}
-
   const toggleShowComments = () => {
     setExpanded(!expanded);
   };
@@ -73,12 +71,7 @@ export default function PostItem({ post }: Props) {
                   />
                 </PostActionsWrapper>
 
-                <Collapse
-                  in={expanded}
-                  timeout="auto"
-                  component="li"
-                  unmountOnExit
-                >
+                <Collapse in={expanded} timeout="auto" unmountOnExit>
                   <Divider variant="fullWidth" />
                   <CommentList comments={comments} />
                   <CreateCommentForm postId={postId} />
