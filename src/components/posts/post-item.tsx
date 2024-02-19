@@ -5,6 +5,7 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import {
   Avatar,
+  Collapse,
   Divider,
   ListItem,
   ListItemAvatar,
@@ -12,17 +13,39 @@ import {
 } from "@mui/material";
 
 import type { Post } from "@/types/app";
+import { useAppDispatch } from "@/lib/hooks";
+import { toggleLike } from "@/lib/features/posts/postsSlice";
+import { getSession } from "@/lib/auth";
 import PostAction from "@/components/posts/post-action";
+import CommentList from "@/components/posts/comment-list";
+import CreateCommentForm from "@/components/posts/create-comment-form";
 
 type Props = {
   post: Post;
 };
 
 export default function PostItem({ post }: Props) {
-  const { id, text, userName, likes, comments } = post;
+  const [expanded, setExpanded] = React.useState(false);
+
+  const dispatch = useAppDispatch();
+  const { id: postId, text, userName, likes, comments } = post;
+  const { userId } = getSession() ?? {};
+
+  function handleLikeOnPost() {
+    if (!userId) {
+      return;
+    }
+    dispatch(toggleLike({ postId, userId }));
+  }
+
+  function handleCommentOnPost() {}
+
+  const toggleShowComments = () => {
+    setExpanded(!expanded);
+  };
 
   return (
-    <React.Fragment key={id}>
+    <React.Fragment>
       <ListItem alignItems="flex-start">
         <ListItemAvatar>
           <Avatar alt={userName} />
@@ -32,19 +55,40 @@ export default function PostItem({ post }: Props) {
           primary={<Typography variant="subtitle1">{userName}</Typography>}
           secondaryTypographyProps={{ component: "div" }}
           secondary={
-            <PostInnerWrapper>
-              <Typography variant="body1">{text}</Typography>
-              <PostActionsWrapper>
-                <PostAction label={likes.length} icon={FavoriteBorderIcon} />
-                <PostAction
-                  label={comments.length}
-                  icon={ChatBubbleOutlineIcon}
-                />
-              </PostActionsWrapper>
-            </PostInnerWrapper>
+            <>
+              <PostInnerWrapper>
+                <Typography variant="body1">{text}</Typography>
+                <PostActionsWrapper>
+                  <PostAction
+                    label={likes.length}
+                    icon={FavoriteBorderIcon}
+                    highlight={!!userId && likes.includes(userId)}
+                    onClick={handleLikeOnPost}
+                  />
+
+                  <PostAction
+                    label={comments.length}
+                    icon={ChatBubbleOutlineIcon}
+                    onClick={toggleShowComments}
+                  />
+                </PostActionsWrapper>
+
+                <Collapse
+                  in={expanded}
+                  timeout="auto"
+                  component="li"
+                  unmountOnExit
+                >
+                  <Divider variant="fullWidth" />
+                  <CommentList comments={comments} />
+                  <CreateCommentForm postId={postId} />
+                </Collapse>
+              </PostInnerWrapper>
+            </>
           }
         />
       </ListItem>
+
       <Divider variant="fullWidth" component="li" />
     </React.Fragment>
   );

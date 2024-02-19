@@ -9,6 +9,7 @@ export const posts: Post[] = [
     likes: ["u-3", "u-4"],
     comments: [
       {
+        id: "c-1",
         userId: "u-2",
         userName: "Frontend News",
         text: "Great news!",

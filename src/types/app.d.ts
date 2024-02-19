@@ -8,6 +8,7 @@ export type Post = {
 };
 
 export type PostComment = {
+  id: string;
   text: string;
   userId: string;
   userName: string;

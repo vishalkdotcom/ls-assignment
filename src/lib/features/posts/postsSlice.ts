@@ -2,7 +2,7 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 import { createSlice } from "@reduxjs/toolkit";
 import { nanoid } from "nanoid";
 
-import type { Post } from "@/types/app";
+import type { Post, PostComment } from "@/types/app";
 import type { RootState } from "@/lib/store";
 import { posts as initialPosts } from "@/data";
 
@@ -12,6 +12,18 @@ type PostsState = {
 
 type CreatePostPayloadAction = PayloadAction<{
   text: string;
+  userId: string;
+  userName: string;
+}>;
+
+type ToggleLikePayloadAction = PayloadAction<{
+  postId: string;
+  userId: string;
+}>;
+
+type AddCommentPayloadAction = PayloadAction<{
+  text: string;
+  postId: string;
   userId: string;
   userName: string;
 }>;
@@ -38,10 +50,41 @@ export const postsSlice = createSlice({
       };
       state.items.push(newPost);
     },
+    toggleLike: (
+      state,
+      { payload: { postId, userId } }: ToggleLikePayloadAction
+    ) => {
+      const post = state.items.find((p) => p.id === postId);
+      if (post) {
+        const userIdIndex = post.likes.indexOf(userId);
+        if (userIdIndex > -1) {
+          // remove like
+          post.likes.splice(userIdIndex, 1);
+        } else {
+          // add like
+          post.likes.push(userId);
+        }
+      }
+    },
+    addComment: (
+      state,
+      { payload: { text, postId, userId, userName } }: AddCommentPayloadAction
+    ) => {
+      const post = state.items.find((p) => p.id === postId);
+      if (post) {
+        const nextComment: PostComment = {
+          id: nanoid(),
+          text,
+          userId,
+          userName,
+        };
+        post.comments.push(nextComment);
+      }
+    },
   },
 });
 
-export const { createPost } = postsSlice.actions;
+export const { createPost, toggleLike, addComment } = postsSlice.actions;
 
 export const selectPosts = (state: RootState) => state.posts.items;
 

@@ -18,7 +18,7 @@ export default function Home() {
       // style={{ maxWidth: "768px"}}
     >
       {isAuthenticated && <CreatePostForm />}
-      <Box sx={{ mt: 2 }}>
+      <Box sx={{ mt: 2, mb: 8 }}>
         <Typography variant="h6">Feed</Typography>
         <PostList posts={posts} />
       </Box>
