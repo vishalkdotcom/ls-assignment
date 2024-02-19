@@ -17,14 +17,11 @@ import { doLogout, isLoggedIn } from "@/lib/auth";
 
 export default function Navbar() {
   const router = useRouter();
+  const isAuthenticated = isLoggedIn();
 
-  const [isAuthenticated, setIsAuthenticated] = React.useState(() =>
-    isLoggedIn()
-  );
-
-  React.useEffect(() => {
-    setIsAuthenticated(isLoggedIn());
-  }, []);
+  function handleLogout() {
+    router.refresh();
+  }
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -42,7 +39,7 @@ export default function Navbar() {
               Twitter Clone
             </Typography>
             {isAuthenticated ? (
-              <LoggedInUser onLogout={() => router.push("/")} />
+              <LoggedInUser onLogout={handleLogout} />
             ) : (
               <AuthLinks />
             )}

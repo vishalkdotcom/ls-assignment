@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
+import { redirect, useRouter } from "next/navigation";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
@@ -10,12 +11,8 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
-import { useRouter } from "next/navigation";
 
-import { doLogin } from "@/lib/auth";
-import { useAuthRedirect } from "@/hooks/use-auth-redirect";
-import { useMounted } from "@/hooks/use-mounted";
-import { CircularProgress } from "@mui/material";
+import { doLogin, isLoggedIn } from "@/lib/auth";
 
 type LoginFormData = {
   email: string;
@@ -28,8 +25,9 @@ export default function LoginForm() {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
 
-  const hasMounted = useMounted();
-  useAuthRedirect();
+  if (isLoggedIn()) {
+    redirect("/");
+  }
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -42,18 +40,11 @@ export default function LoginForm() {
     const loginSuccess = doLogin(email, password);
     if (loginSuccess) {
       router.push("/");
+      router.refresh();
     } else {
       window.alert("Invalid username or password.");
     }
   };
-
-  if (!hasMounted) {
-    return (
-      <div>
-        <CircularProgress />
-      </div>
-    );
-  }
 
   return (
     <Box

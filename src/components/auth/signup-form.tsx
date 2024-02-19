@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
@@ -11,11 +11,8 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
-import { CircularProgress } from "@mui/material";
 
-import { useMounted } from "@/hooks/use-mounted";
-import { useAuthRedirect } from "@/hooks/use-auth-redirect";
-import { isEmailAlreadyUsed } from "@/lib/auth";
+import { isEmailAlreadyUsed, isLoggedIn } from "@/lib/auth";
 import { useAppDispatch } from "@/lib/hooks";
 import { createUser } from "@/lib/features/users/usersSlice";
 
@@ -35,8 +32,9 @@ export default function SignUp() {
   const [firstName, setFirstName] = React.useState("");
   const [lastName, setLastName] = React.useState("");
 
-  const hasMounted = useMounted();
-  useAuthRedirect();
+  if (isLoggedIn()) {
+    redirect("/");
+  }
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -54,15 +52,8 @@ export default function SignUp() {
 
     dispatch(createUser({ firstName, lastName, email, password }));
     router.push("/auth/login");
+    router.refresh();
   };
-
-  if (!hasMounted) {
-    return (
-      <div>
-        <CircularProgress />
-      </div>
-    );
-  }
 
   return (
     <Box
