@@ -8,10 +8,10 @@ import { Box } from "@mui/material";
 export default function RootLayout(props: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body>
+      <body style={{ margin: "0px" }}>
         <Providers>
           <Navbar />
-          <Box component="main" sx={{ mt: 4 }}>
+          <Box component="main" sx={{ mt: 4, mb: 8 }}>
             {props.children}
           </Box>
         </Providers>

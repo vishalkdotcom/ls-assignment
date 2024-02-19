@@ -28,13 +28,18 @@ export default function Navbar() {
       <AppBar position="static">
         <Container maxWidth="md">
           <Toolbar>
-            <TwitterIcon sx={{ mr: 1 }} />
+            <TwitterIcon sx={{ mr: { xs: "auto", md: 1 } }} />
             <Typography
               variant="h6"
               noWrap
               component={Link}
               href="/"
-              sx={{ mr: "auto", color: "inherit", textDecoration: "none" }}
+              sx={{
+                display: { xs: "none", md: "flex" },
+                mr: "auto",
+                color: "inherit",
+                textDecoration: "none",
+              }}
             >
               Twitter Clone
             </Typography>
@@ -61,7 +66,12 @@ function LoggedInUser({ onLogout }: LoggedInUserProps) {
 
   return (
     <Box sx={{ display: "inline-flex", gap: 2 }}>
-      <Button variant="outlined" color="inherit" onClick={handleLogout}>
+      <Button
+        size="small"
+        variant="outlined"
+        color="inherit"
+        onClick={handleLogout}
+      >
         Logout
       </Button>
     </Box>
@@ -73,13 +83,14 @@ function AuthLinks() {
     <Box sx={{ display: "inline-flex", gap: 2 }}>
       <Button
         href="/auth/login"
+        size="small"
         variant="outlined"
         color="inherit"
         component={Link}
       >
         Login
       </Button>
-      <Button href="/auth/signup" color="inherit" component={Link}>
+      <Button href="/auth/signup" size="small" color="inherit" component={Link}>
         Sign Up
       </Button>
     </Box>

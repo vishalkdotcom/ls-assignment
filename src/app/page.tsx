@@ -16,7 +16,7 @@ export default function Home() {
       // style={{ maxWidth: "768px"}}
     >
       <CreatePostForm />
-      <Box sx={{ mt: 2, mb: 8 }}>
+      <Box sx={{ mt: 2 }}>
         <Typography variant="h6">Feed</Typography>
         <PostList posts={posts} />
       </Box>
