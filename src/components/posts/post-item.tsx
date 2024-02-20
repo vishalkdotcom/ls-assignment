@@ -3,9 +3,13 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import {
   Avatar,
   Collapse,
+  Dialog,
+  DialogContent,
+  DialogTitle,
   Divider,
   ListItem,
   ListItemAvatar,
@@ -19,13 +23,15 @@ import { getSession } from "@/lib/auth";
 import PostAction from "@/components/posts/post-action";
 import CommentList from "@/components/posts/comment-list";
 import CreateCommentForm from "@/components/posts/create-comment-form";
+import EditPostForm from "@/components/posts/edit-post-form";
 
 type Props = {
   post: Post;
 };
 
 export default function PostItem({ post }: Props) {
-  const [expanded, setExpanded] = React.useState(false);
+  const [areCommentsVisible, setAreCommentsVisible] = React.useState(false);
+  const [isEditDialogOpen, setIsEditDialogOpen] = React.useState(false);
 
   const dispatch = useAppDispatch();
   const { id: postId, text, userName, likes, comments } = post;
@@ -38,9 +44,17 @@ export default function PostItem({ post }: Props) {
     dispatch(toggleLike({ postId, userId }));
   }
 
-  const toggleShowComments = () => {
-    setExpanded(!expanded);
-  };
+  function toggleShowComments() {
+    setAreCommentsVisible(!areCommentsVisible);
+  }
+
+  function handleOpenEditDialog() {
+    setIsEditDialogOpen(true);
+  }
+
+  function handleCloseEditDialog() {
+    setIsEditDialogOpen(false);
+  }
 
   return (
     <React.Fragment>
@@ -69,9 +83,17 @@ export default function PostItem({ post }: Props) {
                     icon={ChatBubbleOutlineIcon}
                     onClick={toggleShowComments}
                   />
+
+                  {userId === post.userId && (
+                    <PostAction
+                      label="Edit"
+                      icon={EditOutlinedIcon}
+                      onClick={handleOpenEditDialog}
+                    />
+                  )}
                 </PostActionsWrapper>
 
-                <Collapse in={expanded} timeout="auto" unmountOnExit>
+                <Collapse in={areCommentsVisible} timeout="auto" unmountOnExit>
                   <Divider variant="fullWidth" />
                   <CommentList comments={comments} />
                   <CreateCommentForm postId={postId} />
@@ -81,6 +103,17 @@ export default function PostItem({ post }: Props) {
           }
         />
       </ListItem>
+
+      <Dialog onClose={handleCloseEditDialog} open={isEditDialogOpen}>
+        <DialogTitle>Edit Post</DialogTitle>
+        <DialogContent>
+          <EditPostForm
+            id={postId}
+            text={text}
+            onEditComplete={handleCloseEditDialog}
+          />
+        </DialogContent>
+      </Dialog>
 
       <Divider variant="fullWidth" component="li" />
     </React.Fragment>

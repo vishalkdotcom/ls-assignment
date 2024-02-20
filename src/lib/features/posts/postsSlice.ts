@@ -16,6 +16,12 @@ type CreatePostPayloadAction = PayloadAction<{
   userName: string;
 }>;
 
+type EditPostPayloadAction = PayloadAction<{
+  postId: string;
+  text: string;
+  userId: string;
+}>;
+
 type ToggleLikePayloadAction = PayloadAction<{
   postId: string;
   userId: string;
@@ -49,6 +55,17 @@ export const postsSlice = createSlice({
         comments: [],
       };
       state.items.push(newPost);
+    },
+    editPost: (
+      state,
+      { payload: { postId, text, userId } }: EditPostPayloadAction
+    ) => {
+      const postIndex = state.items.findIndex(
+        (p) => p.id === postId && p.userId === userId
+      );
+      if (postIndex !== -1) {
+        state.items[postIndex].text = text;
+      }
     },
     toggleLike: (
       state,
@@ -84,7 +101,8 @@ export const postsSlice = createSlice({
   },
 });
 
-export const { createPost, toggleLike, addComment } = postsSlice.actions;
+export const { createPost, editPost, toggleLike, addComment } =
+  postsSlice.actions;
 
 export const selectPosts = (state: RootState) => state.posts.items;
 
