@@ -19,12 +19,14 @@ const combinedReducers = combineReducers({
   users: usersReducer,
 });
 
+const persistedReducers = persistReducer(
+  { key: REDUX_PERSIST_KEY, version: 1, storage },
+  combinedReducers
+);
+
 export const makeStore = () => {
   return configureStore({
-    reducer: persistReducer(
-      { key: REDUX_PERSIST_KEY, version: 1, storage },
-      combinedReducers
-    ),
+    reducer: persistedReducers,
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware({
         serializableCheck: {
