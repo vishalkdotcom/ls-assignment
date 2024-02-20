@@ -9,11 +9,9 @@ type Props = {
 };
 
 export default function PostList({ posts }: Props) {
-  const sortedPosts = React.useMemo(() => [...posts].reverse(), [posts]);
-
   return (
     <PostListWrapper>
-      {sortedPosts.map((post) => (
+      {posts.map((post) => (
         <PostItem key={post.id} post={post} />
       ))}
     </PostListWrapper>

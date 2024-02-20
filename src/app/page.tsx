@@ -9,6 +9,7 @@ import CreatePostForm from "@/components/posts/create-post-form";
 
 export default function Home() {
   const posts = useAppSelector(selectPosts);
+  const sortedPosts = React.useMemo(() => [...posts].reverse(), [posts]);
 
   return (
     <Container
@@ -18,7 +19,7 @@ export default function Home() {
       <CreatePostForm />
       <Box sx={{ mt: 2 }}>
         <Typography variant="h6">Feed</Typography>
-        <PostList posts={posts} />
+        <PostList posts={sortedPosts} />
       </Box>
     </Container>
   );
