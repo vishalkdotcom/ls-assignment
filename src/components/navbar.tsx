@@ -28,14 +28,14 @@ export default function Navbar() {
       <AppBar position="static">
         <Container maxWidth="md">
           <Toolbar>
-            <TwitterIcon sx={{ mr: { xs: "auto", md: 1 } }} />
+            <TwitterIcon sx={{ mr: { xs: "auto", sm: 1 } }} />
             <Typography
               variant="h6"
               noWrap
               component={Link}
               href="/"
               sx={{
-                display: { xs: "none", md: "flex" },
+                display: { xs: "none", sm: "flex" },
                 mr: "auto",
                 color: "inherit",
                 textDecoration: "none",
